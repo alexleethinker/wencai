@@ -82,24 +82,40 @@ class Wencai(object):
         else:
             raise Exception(r.content.decode('utf-8'))
 
-    def search(self, query_string):
+    def search(self, query_string, page=1):
 
         payload = {
             "question": query_string,
-            "page": 1,
-            "perpage": 50,
+            "page": page,
+            "perpage": 100,
             "log_info": '{"input_type": "typewrite"}',
             "source": "Ths_iwencai_Xuangu",
-            "version": 2.0,
-            "secondary_intent": "",
-            "query_area": "",
-            "block_list": "",
-            "add_info": '{"urp": {"scene": 1, "company": 1, "business": 1}, "contentType": "json", "searchInfo": true}'
+            "secondary_intent": 'stock',
+            "iwcpro":'1'
         }
 
+
+        cookies = {
+            "WafStatus":'0',
+            "ta_random_userid":'anro5tt7uu',
+            "cid":'e77a8079986b06e6a9a46e614cf7eee21659209895',
+            "ComputerID":'e77a8079986b06e6a9a46e614cf7eee21659209895',
+            "other_uid":'Ths_iwencai_Xuangu_x25492z942nd2ag2aqbfqwh7m852m7vi',
+            "wencai_pc_version":'1',
+            "PHPSESSID":'1a050ae712a2ffa0167a4156e05b5222',
+            "user_status":'0',
+            "user":'MDrA7tbHVFE6Ok5vbmU6NTAwOjY1ODIwMTM5Mjo3LDExMTExMTExMTExLDQwOzQ0LDExLDQwOzYsMSw0MDs1LDEsNDA6Ojo6NjQ4MjAxMzkyOjE2NjM3MTQ1MjE6OjoxNjYyNjY5OTAwOjg2NDAwOjA6MTIyOTY3OWFkNDA3ODU3MDc2YTAxMjk1MTQ3MjFiZmVlOmRlZmF1bHRfNDox',
+            "userid":'648201392',
+            "u_name":'%C0%EE%D6%C7TQ',
+            "escapename":'%25u674e%25u667aTQ',
+            "ticket":'2ff3dd9684c1c9293e5710f12d11504d',
+            "utk":'64f6cdb088b3051b16c66413c025911d',
+            "v":'A5CqLGMrxzkE_Zs9f4SItDA-YdXnWXU8lj_InYpgX2i-IzzLMmlEM-ZNmC_Z'
+        }
         r = self.session.post_result(url=WENCAI_CRAWLER_URL['search'],
-                                     data=payload, force_cookies=True)
+                                     data=payload, cookies = cookies, force_cookies=True)
         result = r.json()['data']['answer'][0]['txt'][0]['content']['components'][0]['data']['datas']
+
 
         def _re_str(x: str):
             _re = re.findall('(.*):前复权', x)
